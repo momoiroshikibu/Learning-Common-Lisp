@@ -13,7 +13,7 @@
     'the-list-is-empty)
 ;; THE-LIST-HAS-STUFF-IN-IT
 
-(IF '()
+(if '()
     'the-list-has-stuff-in-it
     'the-list-is-empty)
 ;; THE-LIST-IS-EMPTY
