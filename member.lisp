@@ -6,6 +6,9 @@
 (member 1 '(3 4 1 5))
 ;; (1 5)
 
+(member '(1 . 2) '((1 . 2) (1 . 3)) :test #'equal)
+;; ((1 . 2) (1 . 3))
+
 
 
 (if (member nil '(3 4 nil 5))
