@@ -38,3 +38,8 @@
 
 ;; 配列に(aref x 1000)とすると、1000番目の要素に直接アクセス可能。
 (aref (make-array 1001) 1000)
+
+
+;; initial-contentsで初期値を設定可能。
+(make-array 5 :initial-contents '(1 2 3 4 5))
+;; #(1 2 3 4 5)
