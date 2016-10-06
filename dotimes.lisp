@@ -4,3 +4,9 @@
 (dotimes (i 10) (princ i))
 ;; 0123456789
 ;; NIL
+
+
+(dotimes (i 3)
+  (fresh-line)
+  (princ i)
+  (princ ". Hatchoo!"))
