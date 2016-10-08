@@ -76,3 +76,38 @@
 ;; 4
 ;; 5
 ;; FALAFEL
+
+
+;;; 値を集めてリストにする
+(loop for i
+     in '(2 3 4 5 6 7)
+   collect (* i i))
+;; (4 9 16 25 36 49)
+
+
+;;; 複数のfor節を使う
+;; どちらの変数も同時に0から9まで変化する
+(loop for x below 10
+     for y below 10
+   collect (+ x y))
+;; (0 2 4 6 8 10 12 14 16 18)
+
+
+;;; デカルト積
+(loop for x below 10
+     collect (loop for y below 10
+                collect (+ x y)))
+;; ((0 1 2 3 4 5 6 7 8 9) (1 2 3 4 5 6 7 8 9 10) (2 3 4 5 6 7 8 9 10 11)
+;;  (3 4 5 6 7 8 9 10 11 12) (4 5 6 7 8 9 10 11 12 13)
+;;  (5 6 7 8 9 10 11 12 13 14) (6 7 8 9 10 11 12 13 14 15)
+;;  (7 8 9 10 11 12 13 14 15 16) (8 9 10 11 12 13 14 15 16 17)
+;;  (9 10 11 12 13 14 15 16 17 18))
+
+
+(loop for i
+   from 0
+   for day
+   in '(monday thesday wednesday thursday friday saturday sunday)
+   collect (cons i day))
+;; ((0 . MONDAY) (1 . THESDAY) (2 . WEDNESDAY) (3 . THURSDAY) (4 . FRIDAY)
+;;  (5 . SATURDAY) (6 . SUNDAY))
