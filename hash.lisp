@@ -31,3 +31,16 @@
 (gethash 'lisa *drink-order*)
 ;; SMALL-DRIP-COFFEE
 ;; T
+
+
+;; remhash: 値の削除
+(defparameter *table1* (make-hash-table))
+(setf (gethash 'yeah *table1*) 'yeah)
+(gethash 'yeah *table1*)
+;; YEAH, T
+(remhash 'yeah *table1*)
+;; T
+(gethash 'yeah *table1*)
+;; NIL, NIL
+(remhash 'yeah *table1*)
+;; NIL
