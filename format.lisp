@@ -35,7 +35,38 @@
 ;;; 制御文字列に従って解釈されて整形される。
 
 
+;;; 制御シーケンス~s, ~aを使えば、prin1とprincの出力と同じものをformatの出力中に埋め込むことができる。
+;;; ~sはprin1とおあん軸、Lispが後から読み込めるような区切り文字が入った形式を出力する。
+;;; ~aはprincと同じく、人間が読みやすい形式。
+(format t "I am printing ~s in the middle of this sentence." "foo")
+;; I am printing "foo" in the middle of this sentence.
+
+(format t "I am printing ~a in the middle of this sentence." "foo")
+;; I am printing foo in the middle of this sentence.
 
 
 
+;;; ~10a
+;;; 値の部分が10文字になるように、fooの右に7個の空白が追加される
+(format t "I am printing ~10a within ten spaces of room." "foo")
+;; I am printing foo        within ten spaces of room.
+
+;;; 値の左側に空白を含める場合、@を加える
+(format t "I am printing ~10@a within ten spaces of room." "foo")
+;; I am printing        foo within ten spaces of room.
+
+
+;;; 制御シーケンスへのパラメータを複数渡す場合は,で区切る
+;;; 表示幅を埋める際に、1つではなく3つずつ空白を足すように指示する。空白は全体の表示幅が10文字に等しくなるかそれを超えるまで足される。
+(format t "I am printing ~10,3a within ten (or more) spaces of room." "foo")
+;; I am printing foo          within ten (or more) spaces of room.
+
+
+;;; 少なくとも何文字かの空白(パディング文字数の下限)
+(format t "I am printing ~,,4a in the middle of this sentence." "foo")
+;; I am printing foo     in the middle of this sentence.
+
+;;; 4番目の制御シーケンスパラメータはパディングに使われる文字
+(format t "The word ~,,4,'!a feels very important." "foo")
+;; The word foo!!!! feels very important.
 
