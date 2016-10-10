@@ -153,3 +153,108 @@
 ;;
 ;;
 ;; on two lines spread far apart
+
+
+
+;;; テキストを揃える
+(defun random-animal ()
+  (nth (random 5) '(dog tick tiger walrus kangaroo)))
+
+;;; 表を作るには~t制御シーケンスが便利
+;;; パラメータは整形後のテキストが現れるべきカラム位置
+
+;;; 5, 15, 25カラム目から3列で表示
+(loop repeat 10
+   do (format t "~5t~a ~15t~a ~25t~a~%"
+              (random-animal)
+              (random-animal)
+              (random-animal)))
+;;      TICK      KANGAROO  TICK
+;;      TIGER     WALRUS    WALRUS
+;;      KANGAROO  TIGER     DOG
+;;      KANGAROO  TICK      TIGER
+;;      TICK      TICK      WALRUS
+;;      TIGER     TIGER     DOG
+;;      TICK      KANGAROO  WALRUS
+;;      KANGAROO  TICK      TIGER
+;;      TICK      WALRUS    DOG
+;;      KANGAROO  TIGER     DOG
+
+
+
+;;; 1行の中で動物名がなるべく等しい距離を取って表示されるように
+;;; ~< と ~> 制御シーケンスを使う。
+(loop repeat 10
+     do (format t "~30<~a~;~a~;~a~>~%"
+                (random-animal)
+                (random-animal)
+                (random-animal)))
+;; KANGAROO     WALRUS      TIGER
+;; KANGAROO    TIGER     KANGAROO
+;; WALRUS       TIGER        TICK
+;; TIGER         DOG          DOG
+;; TIGER    KANGAROO     KANGAROO
+;; TICK         TICK         TICK
+;; TIGER       TICK        WALRUS
+;; TICK       DOG        KANGAROO
+;; DOG       WALRUS        WALRUS
+;; KANGAROO      TIGER       TICK
+
+;; ~30< がテキスト揃えのブロックの開始を示す
+;; パラメータの30はブロックが30も自分の幅を持つことを指定する
+;; ~aが3つ並ぶ => 動物を3列に並べる。
+;; それぞれの~aは~;で区切られていて、これは~<による字寄せの対象となる新たな値が次に来ることを示す。
+;; (~;は値を適切に字寄せするための空白文字の挿入を指示する)
+;; 字寄せの対象となる範囲の終了は~>制御シーケンスによって指示される。
+
+;;; ~<制御シーケンスに:@フラグを与えると、値をセンタリングしてくれる。
+
+(loop repeat 10 do (format t "~30:@<~a~>~%" (random-animal)))
+;;              TICK             
+;;             TIGER             
+;;             WALRUS            
+;;            KANGAROO           
+;;              DOG              
+;;             WALRUS            
+;;              DOG              
+;;              TICK             
+;;              DOG              
+;;            KANGAROO           
+
+
+;;; 複数列の場合に:@を使うと、行の左右に空白を付け足して行全体をセンタリングしてくれる。
+(loop repeat 10
+     do (format t "~30:@<~a~;~a~;~a~;~>~%"
+                (random-animal)
+                (random-animal)
+                (random-animal)))
+;;   TIGER  KANGAROO  WALRUS     
+;;   WALRUS   WALRUS   TICK      
+;;    TICK   TICK   TIGER        
+;;  KANGAROO KANGAROO  WALRUS    
+;;   TIGER  TIGER  KANGAROO      
+;;   TIGER  TIGER  KANGAROO      
+;;   TIGER   WALRUS   TIGER      
+;;   TICK   KANGAROO   TICK      
+;;   TIGER   TIGER   WALRUS      
+;;    TIGER   DOG   WALRUS       
+
+
+;;; キレイに揃った3列組を実現するには、列ごとに独立して、10文字ずつのセンタリングを指定する
+
+(loop repeat 10
+     do (format t "~10:@<~a~>~10:@<~a~>~10:@<~a~>~%"
+                (random-animal)
+                (random-animal)
+                (random-animal)))
+;;    TICK     TIGER      TICK   
+;;    DOG       DOG       DOG    
+;;  KANGAROO    TICK     WALRUS  
+;;  KANGAROO   WALRUS     DOG    
+;;   TIGER      DOG      TIGER   
+;;    TICK     WALRUS     DOG    
+;;  KANGAROO    TICK     TIGER   
+;;    TICK     WALRUS     DOG    
+;;    DOG       TICK      DOG    
+;;  KANGAROO   TIGER      TICK   
+
