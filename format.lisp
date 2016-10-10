@@ -126,5 +126,30 @@
 
 
 
+;;; 複数行
+;; ~% => 常に改行する(terpri相当)
+;; ~& => 必要なときだけ改行(fresh-line相当)
 
 
+(progn (format t "this is on the line ~%")
+       (format t "~%this is on another line"))
+;; this is on the line 
+;; 
+;; this is on another line
+
+
+(progn (format t "this is on one line~&")
+       (format t "~&this is on another line"))
+;; this is on one line
+;; this is on another line
+
+
+;;; 余分な~%があると空行が増えて出力が醜くなるが、同じ場所に~&を使えばそれを避けられる。
+;;; これらのシーケンスは改行数を指定するパラメータを1つ取る。
+(format t "this will print ~5%on two lines spread far apart")
+;; this will print 
+;;
+;;
+;;
+;;
+;; on two lines spread far apart
