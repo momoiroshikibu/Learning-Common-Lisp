@@ -10,3 +10,8 @@
 
 (parse-integer "no-integer" :junk-allowed t)
 ;; NIL, 0
+
+
+(parse-integer "10" :radix 16)
+;; 16, 2
+
