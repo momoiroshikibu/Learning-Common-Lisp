@@ -70,3 +70,61 @@
 (format t "The word ~,,4,'!a feels very important." "foo")
 ;; The word foo!!!! feels very important.
 
+
+
+;;; 整数の整形
+
+;;; 16進数 => ~x
+(format t "The number 1000 in hexadecimal is ~x" 1000)
+;; The number 1000 in hexadecimal is 3E8
+
+
+;;; 2進数
+(format t "The number 1000 in binary is ~b" 1000)
+;; The number 1000 in binary is 1111101000
+
+
+;;; 10進数
+(format t "The number 1000 in decimal is ~d" 1000)
+;; The number 1000 in decimal is 1000
+
+;;; ,による桁のグループ化 => :
+(format t "Numbers with commas in them are ~:d times better." 1000000)
+;; Numbers with commas in them are 1,000,000 times better.
+
+
+;;; 表示幅の指定
+(format t "I am printing ~10d within ten spaces of room" 10000)
+;; I am printing      10000 within ten spaces of room
+(format t "I am printing ~10,'xd within ten spaces of room" 10000)
+;; I am printing xxxxx10000 within ten spaces of room
+
+
+;;; 浮動小数点数の整形
+;;; ~f制御シーケンス
+;;; 指定された表示幅(小数点も含める)に収まるように丸められる
+(format t "PI can be estimated as ~4f" 3.141593)
+;; PI can be estimated as 3.14
+
+;;; ~fの2番目のパラメータは、小数点以下に表示する桁数。
+(format t "PI can be estimated as ~,4f" 3.141593)
+;; PI can be estimated as 3.1416
+
+;;; Common Lispにはpiという定数がある
+(format t "PI can be estimated as ~,4f" pi)
+;; PI can be estimated as 3.1416
+
+;;; ~f制御シーケンスの3番目のパラメータは表示する数を10の指数倍するためのその指数
+;; 2を渡すと表示する数は10の2乗倍され、%表示になる
+(format t "Percentages are ~,,2f percent better than fractions" 0.77)
+;; Percentages are 77.0 percent better than fractions
+
+
+;;; 価格を表示するときには~fの代わりに~$を使うと良い
+(format t "I wish I had ~$ dollars in my bank account." 1000000.2)
+;; I wish I had 1000000.20 dollars in my bank account.
+
+
+
+
+
