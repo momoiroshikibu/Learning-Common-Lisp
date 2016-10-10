@@ -258,3 +258,29 @@
 ;;    DOG       TICK      DOG    
 ;;  KANGAROO   TIGER      TICK   
 
+
+
+;;; 繰り返し
+;;; formatでループを実現するのは~{~}の制御シーケンス
+;;; このリストを与えると、formatはリスト中のデータをループで処理する。
+;;; 与えられたリストの要素数分、その制御文字列が繰り返し使われる。
+
+(defparameter *animals* (loop repeat 10 collect (random-animal)))
+
+(format t "~{I see a ~a! ~}" *animals*)
+;; I see a KANGAROO! I see a KANGAROO! I see a TIGER! I see a DOG! I see a KANGAROO! I see a WALRUS! I see a WALRUS! I see a KANGAROO! I see a TIGER! I see a TIGER! 
+
+
+;;; ループ1回につき複数の値をリストから取ることもできる
+;;; ループ本体の中に2つの~a制御シーケンスが含まれる。
+;;; 各~aにつき1匹の動物がリストから使われるので、ループ1回につき2匹ずつの動物が表示される。
+(format t "~{I see a ~a... or was it a ~a?~%~}" *animals*)
+;; I see a KANGAROO... or was it a KANGAROO?
+;; I see a TIGER... or was it a DOG?
+;; I see a KANGAROO... or was it a WALRUS?
+;; I see a WALRUS... or was it a KANGAROO?
+;; I see a TIGER... or was it a TIGER?
+
+
+
+
