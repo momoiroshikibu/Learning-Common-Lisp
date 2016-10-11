@@ -27,3 +27,28 @@
                     (and i2 (parse-params (subseq s (1+ i2))))))
           ((equal s "") nil)
           (t 5))))
+
+(defun parse-url (s)
+  (let * ((url (subseq s
+                       (+ 2 (position #\space s))
+                       (position #\Space s :from-end t)))
+          (x (position #\? url)))
+       (if x
+           (cons (subseq url 0 x) (parse-params (subseq url (1+ x))))
+           (cons url '()))))
+
+
+(defun get-header (stream)
+  (let* ((s (read-line stream))
+        (h (let ((i (position #\: s)))
+             (when i
+               (cons (intern (string-upcase (subseq s 0 i)))
+                     (subseq s (+ i 2)))))))
+    (when h
+      (cons h (get-header stream)))))
+
+(get-header (make-string-input-stream "foo: 1
+bar: abc, 123
+
+"))
+
