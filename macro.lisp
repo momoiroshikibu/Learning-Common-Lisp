@@ -136,3 +136,57 @@
 
 ;; アナフォリックマクロの性質として、予め決まっている変数を補足するのはバグではなく仕様
 ;; マクロの本体内でこれらの変数を使えるようにわざわざ補足している。
+
+
+;; 再帰呼び出しマクロ
+(defun my-length (lst)
+  (labels ((f acc)
+           (split lst
+             (f tail (1+ acc)
+                acc)))
+    (f lst 0)))
+
+
+(recurse (n 9)
+         (fresh-line)
+         (if (zerop n)
+             (princ "lift-off!")
+             (progn (princ n)
+                    (setf (1- n)))))
+
+;; 9
+;; 8
+;; 7
+;; 6
+;; 5
+;; 4
+;; 3
+;; 2
+;; 1
+;; lift-off!
+
+(defun pairs (lst)
+  (labels ((f (lst acc)
+             (split lst
+                    (if tail
+                        (f (cdr tail) (cons (cons head (car tail)) acc))
+                        (reverse acc))
+                    (reverse acc))))
+    (f lst nil)))
+;; PAIRS
+(pairs '(a b c d e f))
+
+
+(defmacro recurse (vars &body body)
+  (let1 p (pairs vars)
+    `(labels ((self ,(mapcar #'car p)
+                ,@body))
+       (self ,@(mapcar #'cdr p)))))
+
+
+(defun my-length (lst)
+  (recurst (lst lst
+                acc 0)
+           (split lst
+                  (self tail (1+ acc))
+                  acc)))
