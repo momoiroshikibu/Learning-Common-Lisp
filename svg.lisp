@@ -90,3 +90,14 @@
                                         (list (car tp) (cdr tp)))
                                       points))
        style (svg-style color)))
+
+(defun random-walk (value length)
+  (unless (zerop length)
+    (cons value
+          (random-walk (if (zerop (random 2))
+                           (1- value)
+                           (1+ value))
+                       (1- length)))))
+
+(random-walk 100 10)
+
