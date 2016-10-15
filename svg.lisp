@@ -81,3 +81,12 @@
      (circle '(50 . 50) 50 '(255 0 0))
      (circle '(100 . 100) 50 '(0 0 255)))
 
+
+
+(defun polygon (points color)
+  (tag polygon points (format nil
+                              "~{~a,~a !}"
+                              (mapcan (lambda (tp)
+                                        (list (car tp) (cdr tp)))
+                                      points))
+       style (svg-style color)))
