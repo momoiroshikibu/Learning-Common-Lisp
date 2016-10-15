@@ -25,3 +25,17 @@
 ;; (WELD LOOK WALK PICKUP INVENTORY)
 
 
+(defparameter *bucket-filled* nil)
+
+(defun dunk (subject object)
+  (if (and (eq *location* 'garden)
+           (eq subject 'bucket)
+           (eq object 'well)
+           (have 'bucket)
+           *chain-welded*)
+      (progn (setf *bucket-filled* t)
+             '(the bucket is now full of water))
+      '(you cannot dunk like that.)))
+
+(pushnew 'dunk *allowed-commands*)
+
