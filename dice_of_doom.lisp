@@ -15,10 +15,19 @@
                                  (1+ (random *max-dice*))))))
 ;; 呼ばれるたびに、ランダムに決まる異なる結果を返すので、関数型ではない。
 
-(gen-board)
-
 
 (defun player-letter (n)
   "プレイヤー番号を文字に変換する"
   (code-char (+ 97 n)))
+
+(defun draw-board (board)
+  (loop for y below *board-size*
+     do (progn (fresh-line)
+               (loop repeat (- *board-size* y)
+                  do (princ " "))
+               (loop for x below *board-size*
+                  for hex = (aref board (+ x (* *board-size* y)))
+                  do (format t "~a-~a " (player-letter (first hex))
+                             (second hex))))))
+
 
