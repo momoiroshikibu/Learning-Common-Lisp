@@ -72,3 +72,36 @@
 (defun lazy-null (x)
   (not (force x)))
 
+
+
+;; 通常のリストと遅延リストとの交換
+(defun make-lazy (lst)
+  (lazy (when lst
+          (cons (car lst) (make-lazy (cdr lst))))))
+
+;; make-lazyは再帰で与えられたリストを順に見ていき、それぞれのコンスをlazyマクロで包んでいるということになる。
+
+;; 遅延リストを通常のリストに変換する
+(defun take (n lst)
+  (unless (or (zerop n) (lazy-null lst))
+    (cons (lazy-car lst) (take (1- n) (lazy-cdr lst)))))
+
+(defun take-all (lst)
+  (unless (lazy-null lst)
+    (cons (lazy-car lst) (take-all (lazy-cdr lst)))))
+
+;; 遅延リストから通常のリストに変換する関数が2つ必要なのは、通常のリストと違って、遅延リストは無限に長い可能性があるから。
+;; 指定した数の要素だけを取り出す関数があれば、無限リストに対しても使える。
+;; take関数は取り出したい要素数を指定するn引数を取る。
+;; すべての値が欲しいなら、take-all関数が使える。
+;; take-all関数は無限リストには使えない。無限リストからすべての要素を取り出すには無限の時間がかかる。
+
+(take 10 *integers*)
+;; (1 2 3 4 5 6 7 8 9 10)
+
+(take 10 (make-lazy '(q w e r t y u i o p a s d f)))
+;; (Q W E R T Y U I O P)
+
+(take-all (make-lazy '(q w e r t y u i o p a s d f)))
+;; (Q W E R T Y U I O P A S D F)
+
