@@ -105,3 +105,41 @@
 (take-all (make-lazy '(q w e r t y u i o p a s d f)))
 ;; (Q W E R T Y U I O P A S D F)
 
+
+
+;; 遅延リストに対するマッピングと検索
+(defun lazy-mapcar (fun lst)
+  (lazy (unless (lazy-null lst)
+          (cons (funcall fun (lazy-car lst))
+                (lazy-mapcar fun (lazy-cdr lst))))))
+
+(defun lazy-mapcan (fun lst)
+  (labels ((f (lst-cur)
+             (if (lazy-null lst-cur)
+                 (force (lazy-mapcan fun (lazy-cdr lst)))
+                 (cons (lazy-car lst-cur) (lazy (f lazy-cdr lst-cur))))))
+    (lazy (unless (lazy-null lst)
+            (f (funcall fun (lazy-car lst)))))))
+
+(defun lazy-find-if (fun lst)
+  (unless (lazy-null lst)
+    (let ((x (lazy-car lst)))
+      (if (funcall fun x)
+          x
+          (lazy-find-if fun (lazy-cdr lst))))))
+
+(defun lazy-nth (n lst)
+  (if (zerop n)
+      (lazy-car lst)
+      (lazy-nth (1- n) (lazy-cdr lst))))
+
+
+(take 10 (lazy-mapcar #'sqrt *integers*))
+;; (1.0 1.4142135 1.7320508 2.0 2.236068 2.4494898 2.6457512 2.828427 3.0 3.1622777)
+
+(lazy-find-if #'oddp (make-lazy '(2 4 6 7 8 10)))
+;; 7
+
+(lazy-nth 4 (make-lazy '(a b c d e f g)))
+;; E
+
