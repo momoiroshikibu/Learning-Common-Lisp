@@ -99,3 +99,18 @@
 ;; そのようなマスを見つけたら、それを有効な攻撃の手として記述する。
 ;; 攻撃の手の記述は、攻撃元のマスの番号と攻撃先のマスの番号をリストにしたもの。
 ;; 手番を終了するときとどうよう、この攻撃の手をさした後に可能なすべての手をゲーム木として再帰的に生成する。
+
+
+(defun neighbors (pos)
+  "隣接するマスを見つける"
+  (let ((up (- pos *board-size*))
+        (down (+ pos *board-size*)))
+    (loop for p in (append (list up down)
+                           (unless (zerop (mod pos *board-size*))
+                             (list (1- up) (1- pos)))
+                           (unless (zerop (mod (1+ pos) *board-size*))
+                             (list (1+ pos) (1+ down))))
+         when (and (>= p 0) (< p *board-hexnum*))
+       collect p)))
+(neighbors 2)
+
