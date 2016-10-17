@@ -58,3 +58,31 @@
 ;; ただし、これがプレーヤーの手番の最初の手のときは最低1回攻撃しないとならないので、movesをそのまま帰す。
 ;; そうでなければ、新たな手を加える。
 
+
+;; 指し手の情報
+;; ・最初の要素は、手の記述。ここでは常に手番を終了するだけなので、記述はnilとしておく。
+;; ・次の要素は、この手が指された後にあり得る全ての可能性を表すゲーム木。
+;;   この部分はgame-treeを再帰的に呼び出すことで作れる。プレーヤーはこの手で手番を終了するので、
+;;   add-new-dice関数を使って、獲得したサイコロの数に応じて受ける補給を反映した新たな盤面を作り出し、game-treeの引数に渡す。
+
+(defun attacking-moves (board cur-player spare-dice)
+  (labels ((player (pos)
+             (car (aref board pos)))
+           (dice (pos)
+             (cadr (aref board pos))))
+    (mapcan (lambda (src)
+              (when (eq (player src) cur-player)
+                (mapcan (lambda (dst)
+                          (when (and (not (eq (player dst) cur-player))
+                                     (> (dice src) (dice dst)))
+                            (list
+                             (list (list src dst)
+                                   (game-tree (board-attack board cur-player
+                                                            src dst (dice src))
+                                              cur-player
+                                              (+ spare-dice (dice dst))
+                                              nil)))))
+                        (neighbors src))))
+            (loop for n below *board-hexnum*
+                 collect n))))
+
