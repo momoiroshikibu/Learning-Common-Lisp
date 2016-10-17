@@ -114,3 +114,13 @@
        collect p)))
 (neighbors 2)
 
+
+
+(defun board-attack (board player src dst dice)
+  "攻撃を行う. マスsrcからdstを攻撃したときに何が起きるかを計算する"
+  (board-array (loop for pos from 0
+                    for hex across board
+                    collect (cond ((eq pos src) (list player 1))
+                                  ((eq pos dst) (list player (1- dice)))
+                                  (t hex)))))
+
