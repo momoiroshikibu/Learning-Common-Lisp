@@ -31,3 +31,30 @@
                              (second hex))))))
 
 
+(defun game-tree (board player spare-dice first-move)
+  "ゲームツリーの作成"
+  (list player
+        board
+        (add-passing-move board
+                          player
+                          spare-dice
+                          first-move
+                          (attacking-moves board player spare-dice))))
+
+
+(defun add-passing-move (board player spare-dice first-move moves)
+  "相手に手番を渡す"
+  (if first-move
+      moves
+      (cons (list nil
+                  (game-tree (add-new-dice board player (1- spare-dice))
+                             (mod (1+ player) *num-players*)
+                             0
+                             t))
+            moves)))
+
+;; 指し手のリストに(それが許されていれば)自分の手番を終了するという動きを追加する。
+;; 現在までに集められた可能な指し手が引数movesに渡され、この関数はそれに指し手を追加して返す。
+;; ただし、これがプレーヤーの手番の最初の手のときは最低1回攻撃しないとならないので、movesをそのまま帰す。
+;; そうでなければ、新たな手を加える。
+
