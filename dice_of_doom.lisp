@@ -137,3 +137,11 @@
     (board-array (f (coerce board 'list) spare-dice))))
 
 (add-new-dice #((0 1) (1 3) (0 2) (1 1)) 0 2)
+
+
+(defun play-vs-human (tree)
+  (print-info tree)
+  (if (caddr tree)
+      (play-vs-human (handle-human tree))
+      (announce-winner (cadr tree))))
+
