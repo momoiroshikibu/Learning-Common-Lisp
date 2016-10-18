@@ -124,3 +124,16 @@
                                   ((eq pos dst) (list player (1- dice)))
                                   (t hex)))))
 
+(defun add-new-dice (board player spare-dice)
+  (labels ((f (lst n)
+             (cond ((null lst) nil)
+                   ((zerop n) lst)
+                   (t (let ((cur-player (caar lst))
+                            (cur-dice (cadar lst)))
+                        (if (and (eq cur-player player) (< cur-dice *max-dice*))
+                            (cons (list cur-player (1+ cur-dice))
+                                  (f (cdr lst) (1- n)))
+                            (cons (car lst) (f (cdr lst) n))))))))
+    (board-array (f (coerce board 'list) spare-dice))))
+
+(add-new-dice #((0 1) (1 3) (0 2) (1 1)) 0 2)
