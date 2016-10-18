@@ -145,3 +145,9 @@
       (play-vs-human (handle-human tree))
       (announce-winner (cadr tree))))
 
+
+(defun print-info (tree)
+  (fresh-line)
+  (format t "current player = ~a" (player-letter (car tree)))
+  (draw-board (cadr tree)))
+
