@@ -181,3 +181,9 @@
                          (not (eq (cdr x) best)))
                        totals))))
 
+(defun announce-winner (board)
+  (fresh-line)
+  (let ((w (winners board)))
+    (if (> (length w) 1)
+        (format t "The game is a tie between ~a" (mapcar #'player-letter w))
+        (format t "The winner is ~a" (player-letter (car w))))))
