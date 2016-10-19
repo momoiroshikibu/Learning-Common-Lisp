@@ -168,3 +168,16 @@
     (fresh-line)
     (cadr (nth (1- (read)) moves))))
 
+
+(defun winners (board)
+  "勝者を決定する"
+  (let* ((tally (loop for hex across board collect (car hex)))
+         (totals (mapcar (lambda (player)
+                           (cons player (count player tally)))
+                         (remove-duplicates tally)))
+         (best (apply #'max (mapcar #' cdr totals))))
+    (mapcar #'car
+            (remove-if (lambda (x)
+                         (not (eq (cdr x) best)))
+                       totals))))
+
