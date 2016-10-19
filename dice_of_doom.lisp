@@ -151,3 +151,20 @@
   (format t "current player = ~a" (player-letter (car tree)))
   (draw-board (cadr tree)))
 
+
+(defun handle-human (tree)
+  "人間のプレーヤーからの入力を処理する"
+  (fresh-line)
+  (princ "choose your move:")
+  (let ((moves (caddr tree)))
+    (loop for move in moves
+         for n from 1
+         do (let ((action (car move)))
+              (fresh-line)
+              (format t "~a. " n)
+              (if action
+                  (format t "~a -> ~a" (car action) (cadr action))
+                  (princ "end turn"))))
+    (fresh-line)
+    (cadr (nth (1- (read)) moves))))
+
