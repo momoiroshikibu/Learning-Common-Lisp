@@ -7,3 +7,9 @@
   (defun neighbors (pos)
     (or (gethash pos previous)
         (setf (gethash pos previous) (funcall old-neighbors pos)))))
+
+(let ((old-game-tree (symbol-function 'game-tree))
+      (previous (make-hash-table :test #'equalp)))
+  (defun game-tree (&rest rest)
+    (or (gethash rest previous)
+        (setf (gethash rest previous) (apply old-game-tree rest)))))
