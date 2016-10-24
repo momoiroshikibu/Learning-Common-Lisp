@@ -206,3 +206,27 @@
             (rate-position (cadr move) player))
           (caddr tree)))
 
+
+
+;; 末尾呼び出し最適化
+(defun my-length (lst)
+  (if lst
+      (1+ (my-length (cdr lst)))
+      0))
+
+(my-length '(file foh fum))
+
+;; 非効率で、大きなリストだと Program stack overflow が発生してしまう。
+
+
+;; acc: アキュムレータ
+(defun my-length (lst)
+  (labels ((f (lst acc)
+             (if lst
+                 (f (cdr lst) (1+ acc))
+                 acc)))
+    (f lst 0)))
+
+(my-length '(file foh fun))
+
+
