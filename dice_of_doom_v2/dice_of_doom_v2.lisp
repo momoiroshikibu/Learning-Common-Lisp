@@ -68,3 +68,14 @@
       (play-vs-human (handle-human tree))
       (announce-winner (cadr tree))))
 
+
+(defun limit-tree-depth (tree depth)
+  (list (car tree)
+        (cadr tree)
+        (if (zerop depth)
+            (lazy-nil)
+            (lazy-mapcar (lambda (move)
+                           (list (car move)
+                                 (limit-tree-depth (cadr move) (1- depth))))
+                         (caddr tree)))))
+
