@@ -94,3 +94,25 @@
   (cond ((lazy-null (caddr tree)) (announce-winner (cadr tree)))
         ((zerop (car tree)) (play-vs-computer (handle-human tree)))
         (t (play-vs-computer (handle-computer tree)))))
+
+
+(defun score-board (board player)
+  (loop for hex across board
+     for pos from 0
+       sum (if (eq (car hex) player)
+               (if (threatened pos board)
+                   1
+                   2)
+               -1)))
+
+(defun threatened (pos board)
+  (let* ((hex (aref board pos))
+         (player (car hex))
+         (dice (cadr hex)))
+    (loop for n in (neighbors pos)
+         do (let* ((nhex (aref board n))
+                   (nplayer (car nhex))
+                   (ndice (cadr nhex)))
+              (when (and (not (eq player nplayer)) (> ndice dice))
+                (return t))))))
+
