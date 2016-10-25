@@ -116,3 +116,17 @@
               (when (and (not (eq player nplayer)) (> ndice dice))
                 (return t))))))
 
+(defun get-ratings (tree player)
+  (take-all (lazy-mapcar (lambda (move)
+                           (rate-position (cadr move) player))
+                         (caddr tree))))
+
+(defun rate-position (tree player)
+  (let ((moves (caddr tree)))
+    (if (not (lazy-null moves))
+        (apply (if (eq (car tree) player)
+                   #'max
+                   #'min)
+               (get-ratings tree player))
+        (score-board (cadr tree) player))))
+
