@@ -143,3 +143,15 @@
                      (cons x (f (lazy-cdr moves) (max x lower-limit))))))))
     (f (caddr tree) lower-limit)))
 
+(defun ab-get-ratings-min (tree player upper-limit lower-limit)
+  (labels ((f (moves upper-limit)
+             (unless (lazy-null moves)
+               (let ((x (ab-rate-position (cadr (lazy-car moves))
+                                          player
+                                          upper-limit
+                                          lower-limit)))
+                 (if (<= x lower-limit)
+                     (list x)
+                     (cons x (f (lazy-cdr moves) (min x upper-limit))))))))
+    (f (caddr tree) upper-limit)))
+
