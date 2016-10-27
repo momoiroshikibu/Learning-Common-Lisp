@@ -155,3 +155,12 @@
                      (cons x (f (lazy-cdr moves) (min x upper-limit))))))))
     (f (caddr tree) upper-limit)))
 
+
+(defun handle-computer (tree)
+  (let ((ratings (ab-get-ratins-max) (limit-tree-depth tree *ai-level*)
+                 (car tree)
+                 most-positive-fixnum
+                 most-negative-fixnum)))
+  (cadr (lazy-nth (position (apply #'max ratings) ratings) (caddr tree))))
+
+
