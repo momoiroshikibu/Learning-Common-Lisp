@@ -20,17 +20,18 @@ exec ros -Q -- $0 "$@"
 ;; Common Lisp Beginner
 ;; https://common-lisp.net/project/common-lisp-beginner/sockets_doc.html
 (defun get-google ()
-  (let ((sock (usocket:socket-connect "google.com" 80)))
-    (format (usocket:socket-stream sock) "~A~C~C~A~C~C~C~C"
+  (let* ((sock (usocket:socket-connect "google.com" 80))
+         (sock-stream (usocket:socket-stream sock)))
+    (format sock-stream "~A~C~C~A~C~C~C~C"
             "GET /index.html HTTP/1.1"
             #\Return #\Newline
             "Connection: close"
             #\Return #\Newline
             #\Return #\Newline)
-    (force-output (usocket:socket-stream sock))
+    (force-output sock-stream)
     (do ((line
-          (read-line (usocket:socket-stream sock) nil)
-          (read-line (usocket:socket-stream sock) nil)))
+          (read-line sock-stream nil)
+          (read-line sock-stream nil)))
         ((not line))
       (format t "~A" line))))
 ;;; vim: set ft=lisp lisp:
