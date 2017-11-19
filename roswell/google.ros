@@ -1,0 +1,36 @@
+#!/bin/sh
+#|-*- mode:lisp -*-|#
+#| <Put a one-line description here>
+exec ros -Q -- $0 "$@"
+|#
+(progn ;;init forms
+  (ros:ensure-asdf)
+  (require :usocket)
+  ;;#+quicklisp (ql:quickload '() :silent t)
+  )
+
+(defpackage :ros.script.google.3720084483
+  (:use :cl))
+(in-package :ros.script.google.3720084483)
+
+(defun main (&rest argv)
+  (declare (ignorable argv))
+  (get-google))
+
+;; Common Lisp Beginner
+;; https://common-lisp.net/project/common-lisp-beginner/sockets_doc.html
+(defun get-google ()
+  (let ((sock (usocket:socket-connect "google.com" 80)))
+    (format (usocket:socket-stream sock) "~A~C~C~A~C~C~C~C"
+            "GET /index.html HTTP/1.1"
+            #\Return #\Newline
+            "Connection: close"
+            #\Return #\Newline
+            #\Return #\Newline)
+    (force-output (usocket:socket-stream sock))
+    (do ((line
+          (read-line (usocket:socket-stream sock) nil)
+          (read-line (usocket:socket-stream sock) nil)))
+        ((not line))
+      (format t "~A" line))))
+;;; vim: set ft=lisp lisp:
