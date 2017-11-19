@@ -10,7 +10,8 @@ exec ros -Q -- $0 "$@"
   )
 
 (defpackage :ros.script.google.3720084483
-  (:use :cl))
+  (:use :cl
+        :usocket))
 (in-package :ros.script.google.3720084483)
 
 (defun main (&rest argv)
@@ -20,8 +21,8 @@ exec ros -Q -- $0 "$@"
 ;; Common Lisp Beginner
 ;; https://common-lisp.net/project/common-lisp-beginner/sockets_doc.html
 (defun get-google ()
-  (let* ((sock (usocket:socket-connect "google.com" 80))
-         (sock-stream (usocket:socket-stream sock)))
+  (let* ((sock (socket-connect "google.com" 80))
+         (sock-stream (socket-stream sock)))
     (format sock-stream "~A~C~C~A~C~C~C~C"
             "GET /index.html HTTP/1.1"
             #\Return #\Newline
